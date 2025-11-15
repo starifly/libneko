@@ -44,8 +44,8 @@ func UrlTest(client *http.Client, link string, timeout int32, standard int) (int
 	default:
 		return 0, errors.New("unknown urltest standard")
 	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Millisecond)
+	baseCtx := context.WithValue(context.Background(), "nb4a_no_concurrent_dial", true)
+	ctx, cancel := context.WithTimeout(baseCtx, time.Duration(timeout)*time.Millisecond)
 	defer cancel()
 
 	req, err := http.NewRequestWithContext(ctx, "GET", link, nil)
